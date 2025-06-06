@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello There</title> <!-- A subtle title that doesn't say "portfolio" -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General body styling for centering and background */
+        body {
+            font-family: 'Inter', sans-serif; /* Using the Inter font */
+            background-color: #2e3a3a; /* Dark desaturated green-gray as a fallback background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Full viewport height */
+            margin: 0;
+            padding: 20px; /* Add some padding for smaller screens */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+            position: relative; /* Needed for video positioning */
+            overflow: hidden; /* Hide overflow */
+        }
+
+        /* Video background styling */
+        #background-video {
+            position: fixed; /* Fixes the video to the viewport */
+            right: 0;
+            bottom: 0;
+            min-width: 100%; /* Ensures video covers full width */
+            min-height: 100%; /* Ensures video covers full height */
+            width: auto;
+            height: auto;
+            z-index: -2; /* Place far behind all other content */
+            background-size: cover; /* Ensures video scales to cover */
+            filter: brightness(0.6) grayscale(0.5); /* Slightly darken and desaturate video for content readability */
+        }
+
+        /* Optional overlay to further enhance contrast if needed */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(46, 58, 58, 0.4); /* Semi-transparent dark overlay */
+            z-index: -1; /* Place between video and content */
+        }
+
+        /* Container for the profile card - now with transparency */
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background-color: rgba(255, 255, 255, 0.85); /* White with 85% opacity */
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1); /* Slightly darker shadow */
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative; /* To ensure it sits above the background */
+            z-index: 0;
+            backdrop-filter: blur(5px); /* Adds a subtle blur to the background behind the box */
+        }
+
+        /* Profile picture styling */
+        .profile-picture-section {
+            margin-bottom: 32px;
+        }
+
+        .profile-picture {
+            width: 144px;
+            height: 144px;
+            border-radius: 9999px; /* Fully rounded */
+            margin: 0 auto;
+            border: 4px solid #66ff00; /* Bright green border to match PFP accents */
+            object-fit: cover;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: filter 0.3s ease-in-out; /* Smooth transition for glow */
+        }
+
+        /* Profile picture glow on hover */
+        .profile-picture:hover {
+            filter: drop-shadow(0 0 12px rgba(102, 255, 0, 0.8)); /* Green glow effect */
+        }
+
+        /* Welcoming text styling */
+        .greeting-heading {
+            font-size: 30px;
+            font-weight: 700;
+            color: #374151; /* Keep dark gray for readability */
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            color: #4b5563; /* Keep gray for readability */
+            margin-bottom: 40px;
+        }
+
+        /* Links section container */
+        .links-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+        }
+
+        /* Styling for individual link buttons */
+        .link-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 600;
+            padding: 14px 28px; /* Slightly more padding for a 'chunky' feel */
+            border-radius: 8px;
+            box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.25), 0 3px 6px -1px rgba(0, 0, 0, 0.15); /* More pronounced shadow */
+            text-decoration: none;
+            transition: all 0.3s ease-in-out; /* Slightly slower transition for smooth effects */
+            border: 2px solid transparent; /* Add a transparent border for hover effect */
+        }
+
+        /* Hover effects for link buttons */
+        .link-button:hover {
+            transform: translateY(-5px); /* More pronounced lift on hover */
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -3px rgba(0, 0, 0, 0.15); /* Larger shadow */
+            border-color: #66ff00; /* Bright green border on hover */
+        }
+
+        /* Active (click) state for buttons */
+        .link-button:active {
+            transform: translateY(0); /* 'Press' down effect */
+            box-shadow: 0 2px 5px -1px rgba(0, 0, 0, 0.2), 0 1px 3px -1px rgba(0, 0, 0, 0.1);
+            border-color: transparent; /* Border disappears when pressed */
+        }
+
+        /* Focus state for accessibility */
+        .link-button:focus {
+            outline: none; /* Remove default outline */
+            border-color: #66ff00; /* Keep green border for focus */
+            box-shadow: 0 0 0 4px rgba(102, 255, 0, 0.5); /* Glowing focus ring */
+        }
+
+        /* Specific button colors to match PFP theme */
+        .link-button.bright-green {
+            background-color: #66ff00; /* Bright green from PFP */
+            color: #1a1a1a; /* Dark text for bright button */
+        }
+        .link-button.bright-green:hover {
+            background-color: #7dff33; /* Slightly lighter on hover */
+        }
+
+        .link-button.charcoal {
+            background-color: #333333; /* Dark charcoal from hoodie */
+            color: #ffffff; /* White text */
+        }
+        .link-button.charcoal:hover {
+            background-color: #1a1a1a; /* Darker on hover */
+        }
+
+        .link-button.desaturated-blue {
+            background-color: #3a79ed; /* Desaturated blue */
+            color: #ffffff;
+        }
+        .link-button.desaturated-blue:hover {
+            background-color: #2a61d6;
+        }
+
+        .link-button.desaturated-orange {
+            background-color: #b06f3b; /* Desaturated orange/brown */
+            color: #ffffff;
+        }
+        .link-button.desaturated-orange:hover {
+            background-color: #9c6233;
+        }
+
+        .link-button.dark-teal {
+            background-color: #0a6e66; /* Darker teal/green */
+            color: #ffffff;
+        }
+        .link-button.dark-teal:hover {
+            background-color: #085e57;
+        }
+
+        /* SVG icon sizing */
+        .link-button svg {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Video Background Element -->
+    <video autoplay muted loop id="background-video">
+        <!-- Replace 'path/to/your/video.mp4' with the actual URL of your video -->
+        <!-- Consider providing multiple source types for broader browser compatibility -->
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-bright-green-smoke-effect-1508-large.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Main Content Container -->
+    <div class="container">
+        <!-- Profile Picture Section -->
+        <div class="profile-picture-section">
+            <img 
+                src="Caveage Code PFP.jpg-c8858ebf-9384-4282-862e-395e2185f052" 
+                alt="Your Profile Photo" 
+                class="profile-picture"
+                onerror="this.onerror=null;this.src='https://placehold.co/150x150/2e3a3a/66ff00?text=Error';"
+            >
+        </div>
+
+        <!-- Welcoming Text (minimal) -->
+        <h1 class="greeting-heading">Hello There!</h1>
+        <p class="tagline">Explore my work and connect with me.</p>
+
+        <!-- Links Section -->
+        <div class="links-section">
+            <!-- Link 1: Your Website/Main Project -->
+            <a 
+                href="https://www.yourwebsite.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="link-button bright-green"
+            >
+                <!-- Example using a simple SVG icon for a website/globe -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11.275a1 1 0 01-.194.614l-1 2a1 1 0 00.384 1.34L8 18l-5.61 3.523a1 1 0 00-.384 1.34l1 2a1 1 0 01.194.614l.001.002.001.001a1 1 0 00.384 1.34l5.61 3.523a1 1 0 001.34-.384l2-1a1 1 0 01.614-.194h.001a1 1 0 001.34.384l3.523 5.61a1 1 0 00.384 1.34l2 1a1 1 0 01.614.194h.001a1 1 0 001.34-.384l5.61-3.523a1 1 0 00.384-1.34l-1-2a1 1 0 01-.194-.614v-.001a1 1 0 00-.384-1.34L16 6.001l5.61-3.523a1 1 0 00.384-1.34l-1-2a1 1 0 01-.194-.614v-.001a1 1 0 00-1.34-.384L10.001 0a1 1 0 00-.384.384l-2 1a1 1 0 01-.614.194H7.001a1 1 0 00-1.34-.384L.065 5.61A1 1 0 00-.319 6.95z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 18s-4-2-4-6V8c0-2.21 1.79-4 4-4s4 1.79 4 4v4c0 4-4 6-4 6z" />
+                </svg>
+                <span>My Main Website</span>
+            </a>
+
+            <!-- Link 2: GitHub/Code Repository -->
+            <a 
+                href="https://github.com/your-username" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="link-button charcoal"
+            >
+                <!-- Simple SVG icon for GitHub -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M12 0C5.373 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.6.11.82-.26.82-.577v-2.2c-3.337.726-4.043-1.61-4.043-1.61-.546-1.385-1.332-1.75-1.332-1.75-1.087-.745.084-.73.084-.73 1.205.086 1.838 1.237 1.838 1.237 1.07 1.833 2.808 1.305 3.49.996.109-.775.42-1.305.762-1.605-2.665-.3-5.464-1.332-5.464-5.93 0-1.31.465-2.38 1.235-3.22-.12-.3-.535-1.52.117-3.187 0 0 1-.32 3.3 1.23.957-.266 1.983-.4 3-.405 1.017.005 2.043.139 3 .405 2.29-1.55 3.29-1.23 3.29-1.23.653 1.667.238 2.887.118 3.187.77.84 1.235 1.91 1.235 3.22 0 4.61-2.8 5.625-5.475 5.92.42.36.805 1.05.805 2.12v3.13c0 .318.22.69.825.577C20.56 21.82 24 17.302 24 12c0-6.627-5.373-12-12-12z"/>
+                </svg>
+                <span>My GitHub</span>
+            </a>
+
+            <!-- Link 3: LinkedIn Profile -->
+            <a 
+                href="https://www.linkedin.com/in/your-profile" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="link-button desaturated-blue"
+            >
+                <!-- Simple SVG icon for LinkedIn -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M22.23 0H1.77C.79 0 0 .77 0 1.77v20.46c0 .98.79 1.77 1.77 1.77h20.46c.98 0 1.77-.79 1.77-1.77V1.77C24 .79 23.21 0 22.23 0zM7.37 20.48H3.6V9.08h3.77v11.4zM5.48 7.42a2.02 2.02 0 11.002-4.04 2.02 2.02 0 01-.002 4.04zm15 13.06h-3.77v-5.63c0-1.34-.02-3.07-1.87-3.07-1.87 0-2.15 1.46-2.15 2.97v5.73h-3.77V9.08h3.61v1.66h.05c.5-.95 1.72-1.95 3.56-1.95 3.81 0 4.51 2.5 4.51 5.76v6.03z"/>
+                </svg>
+                <span>My LinkedIn</span>
+            </a>
+
+            <!-- Link 4: Behance/Dribbble/ArtStation (if applicable) -->
+            <a 
+                href="https://www.behance.net/your-profile" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="link-button desaturated-orange"
+            >
+                <!-- Simple SVG icon for creativity/design (e.g., a palette) -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-2.414-2.414A1 1 0 0015.586 6H7a2 2 0 00-2 2v11a2 2 0 002 2zM15 10v6a1 1 0 01-1 1H9a1 1 0 01-1-1v-6a1 1 0 011-1h5a1 1 0 011 1z" />
+                </svg>
+                <span>My Design Work</span>
+            </a>
+
+            <!-- Link 5: Additional Page (e.g., Blog, Resume, etc.) -->
+            <a 
+                href="https://www.yourblog.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="link-button dark-teal"
+            >
+                <!-- Simple SVG icon for a blog/document -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 2H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span>My Blog/Articles</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
